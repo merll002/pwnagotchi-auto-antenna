@@ -40,13 +40,16 @@ switch_to_onboard_wifi() {
     echo "Stopping pwnagotchi service..."
     sudo systemctl stop pwnagotchi
 
+    # Stop router hotspot
+    sudo killall lnxrouter
+    
     # Bring down wlan0 (external adapter) if it's up
     if ip link show wlan0 &> /dev/null; then
         echo "Bringing down wlan0 (external adapter)..."
         sudo ip link set wlan0 down
     fi
 
-    # Rename wlan_temp back to wlan0
+    # Rename hot0 back to wlan0
     if ip link show hot0 &> /dev/null; then
         echo "Renaming hot0 back to wlan0..."
         sudo ip link set hot0 name wlan0
