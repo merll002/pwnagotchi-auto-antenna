@@ -2,7 +2,7 @@
 
 # Function to switch to the external WiFi adapter (wlan1)
 switch_to_external_wifi() {
-    echo "External WiFi detected, renaming wlan1 to wlan0 and disabling onboard WiFi..."
+    echo "External WiFi detected, renaming wlan1 to wlan0 and creating hotspot..."
 
     # Stop the pwnagotchi service before making changes
     echo "Stopping pwnagotchi service..."
@@ -12,16 +12,19 @@ switch_to_external_wifi() {
     sudo ip link set wlan0 down
     sudo ip link set wlan1 down
 
-    # Rename onboard wlan0 to wlan_temp to avoid name conflict
-    sudo ip link set wlan0 name wlan_temp
+    # Rename onboard wlan0 to hot0 to prepare for hotspot
+    sudo ip link set wlan0 name hot0
 
     # Rename external wlan1 to wlan0
     sudo ip link set wlan1 name wlan0
     sudo ip link set wlan0 up
 
     # Keep the onboard interface down (optional)
-    sudo ip link set wlan_temp down
-
+    sudo ip link set hot0 up
+    
+    # Setup hotspot on hot0
+    sudo lnxrouter -n --ap hot0 **HOTSPOT NAME** -p **PASSWORD** &
+    
     # Start pwnagotchi service after switching
     echo "Starting pwnagotchi service..."
     sudo systemctl start pwnagotchi
@@ -44,9 +47,9 @@ switch_to_onboard_wifi() {
     fi
 
     # Rename wlan_temp back to wlan0
-    if ip link show wlan_temp &> /dev/null; then
-        echo "Renaming wlan_temp back to wlan0..."
-        sudo ip link set wlan_temp name wlan0
+    if ip link show hot0 &> /dev/null; then
+        echo "Renaming hot0 back to wlan0..."
+        sudo ip link set hot0 name wlan0
         sudo ip link set wlan0 up
     fi
 
@@ -71,7 +74,7 @@ while true; do
         echo "External WiFi (wlan1) is NOT detected."
 
         # External WiFi removed, revert to onboard WiFi only if wlan_temp exists
-        if ip link show wlan_temp &> /dev/null && ! ip link show wlan0 &> /dev/null; then
+        if ip link show hot0 &> /dev/null && ! ip link show wlan0 &> /dev/null; then
             switch_to_onboard_wifi
         fi
     fi
