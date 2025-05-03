@@ -14,7 +14,7 @@ It runs in the background and detects WiFi adapter changes in real time, restart
 
 1. **Install dependencies**
    ```bash
-   sudo apt install hostapd iptables
+   sudo apt install hostapd iptables haveged
    sudo curl -o /usr/bin/lnxrouter https://raw.githubusercontent.com/garywill/linux-router/master/lnxrouter
    sudo chmod +x /usr/bin/lnxrouter
    ```
