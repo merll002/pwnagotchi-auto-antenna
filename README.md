@@ -16,6 +16,7 @@ It runs in the background and detects WiFi adapter changes in real time, restart
    ```bash
    sudo apt install hostapd
    sudo curl -o /usr/bin/lnxrouter https://raw.githubusercontent.com/garywill/linux-router/master/lnxrouter
+   sudo chmod +x /usr/bin/lnxrouter
    ```
 
 2. **Download and copy the script** (`wifi_hotspot.sh`) to `/` and make it executable:  
