@@ -18,13 +18,17 @@ It runs in the background and detects WiFi adapter changes in real time, restart
    sudo curl -o /usr/bin/lnxrouter https://raw.githubusercontent.com/garywill/linux-router/master/lnxrouter
    ```
 
-1. **Download and copy the script** (`wifi_hotspot.sh`) to `/` and make it executable:  
+2. **Download and copy the script** (`wifi_hotspot.sh`) to `/` and make it executable:  
    ```bash
    sudo curl -o /wifi_hotspot.sh https://raw.githubusercontent.com/merll002/pwnagotchi-auto-antenna/refs/heads/patch-1/wifi_hotspot.sh
    sudo chmod +x /wifi_hotspot.sh
    ```
+   
+2. **Edit SSID and password**
 
-2. **Create the service file** at `/etc/systemd/system/wifi_hotspot.sh.service`:  
+   wifi_hotspot.sh at line 26, replace: **\*\*HOTSPOT NAME\*\*** and **\*\*PASSWORD\*\***
+   
+4. **Create the service file** at `/etc/systemd/system/wifi_hotspot.sh.service`:  
 
    ```ini
    [Unit]
@@ -44,14 +48,14 @@ It runs in the background and detects WiFi adapter changes in real time, restart
    WantedBy=multi-user.target
    ```
 
-3. **Enable and start the service**:  
+5. **Enable and start the service**:  
    ```bash
    sudo systemctl daemon-reload
    sudo systemctl enable wifi_hotspot.service
    sudo systemctl start wifi_hotspot.service
    ```
 
-4. **Check if the service is running properly**:  
+6. **Check if the service is running properly**:  
    ```bash
    sudo systemctl status wifi_hotspot.service
    ```
